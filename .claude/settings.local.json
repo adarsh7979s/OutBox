@@ -15,7 +15,13 @@
       "Bash(node -p \"JSON.stringify\\(require\\('./frontend/package.json'\\).devDependencies\\)\")",
       "Bash(npm run *)",
       "Bash(echo \"EXIT=$?\")",
-      "Bash(cd \"C:/Users/91797\" && ls -la package.json package-lock.json node_modules 2>&1 | head -20; echo \"=== pkg contents if exists ===\"; cat package.json 2>/dev/null | head -20)"
+      "Bash(cd \"C:/Users/91797\" && ls -la package.json package-lock.json node_modules 2>&1 | head -20; echo \"=== pkg contents if exists ===\"; cat package.json 2>/dev/null | head -20)",
+      "Bash(grep -vE \"^\\\\s*#|^\\\\s*$\" .env.example)",
+      "Bash(node -p \"const p=require\\('./backend/package.json'\\);JSON.stringify\\({dependencies:p.dependencies,devDependencies:p.devDependencies},null,1\\)\")",
+      "Bash(git add *)",
+      "Bash(git status *)",
+      "Bash(git commit -q -m ' *)",
+      "Bash(git push *)"
     ]
   }
 }
