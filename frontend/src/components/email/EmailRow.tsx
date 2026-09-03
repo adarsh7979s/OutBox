@@ -32,31 +32,50 @@ function formatTime(iso: string): string {
 
 export default function EmailRow({ email, onCancel, showCancel = false }: EmailRowProps) {
   const canCancel = showCancel && (email.status === 'SCHEDULED' || email.status === 'RATE_LIMITED');
+  const monogram = email.recipientEmail.charAt(0).toUpperCase();
+
+  // Status + time travel together; they sit inline on wide screens and
+  // stack under the subject on narrow ones so the address stays readable.
+  const meta = (
+    <>
+      <Badge status={email.status} />
+      <span className="flex items-center gap-1.5 text-xs font-data text-[var(--color-ink-muted)] whitespace-nowrap">
+        <Clock className="w-3.5 h-3.5 flex-shrink-0" />
+        {formatTime(email.status === 'SENT' && email.sentAt ? email.sentAt : email.scheduledAt)}
+      </span>
+    </>
+  );
 
   return (
-    <div className="glass rounded-xl p-4 transition-all duration-300 hover:bg-white/[0.06] hover:shadow-[0_4px_24px_rgba(34,211,238,0.04)] group">
-      <div className="flex items-center gap-4">
+    <div className="card card-hover p-4 group">
+      <div className="flex items-start sm:items-center gap-3 sm:gap-4">
+        {/* Recipient monogram */}
+        <div className="hidden sm:flex w-11 h-11 rounded-full bg-[var(--color-violet-soft)] text-[var(--color-violet-deep)] items-center justify-center font-data font-semibold text-base flex-shrink-0">
+          {monogram}
+        </div>
+
         {/* Recipient & Subject */}
         <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 mb-1">
-            <p className="text-sm font-medium text-[var(--color-text-primary)] truncate">
+          <div className="flex items-center gap-2 mb-0.5">
+            <p className="text-sm font-semibold text-[var(--color-ink)] truncate">
               {email.recipientEmail}
             </p>
-            <span className="text-[var(--color-text-muted)] text-xs">·</span>
-            <p className="text-xs text-[var(--color-text-muted)] truncate">
+            <span className="hidden md:inline text-[var(--color-ink-muted)] text-xs">·</span>
+            <p className="hidden md:block text-xs text-[var(--color-ink-muted)] truncate">
               {email.senderEmail}
             </p>
           </div>
-          <p className="text-sm text-[var(--color-text-secondary)] truncate">{email.subject}</p>
+          <p className="text-sm text-[var(--color-ink-soft)] truncate">{email.subject}</p>
+
+          {/* Stacked meta — narrow screens */}
+          <div className="flex sm:hidden items-center flex-wrap gap-x-3 gap-y-1.5 mt-2.5">
+            {meta}
+          </div>
         </div>
 
-        {/* Status */}
-        <Badge status={email.status} />
-
-        {/* Time */}
-        <div className="flex items-center gap-1.5 text-xs text-[var(--color-text-muted)] whitespace-nowrap">
-          <Clock className="w-3.5 h-3.5" />
-          {formatTime(email.status === 'SENT' && email.sentAt ? email.sentAt : email.scheduledAt)}
+        {/* Inline meta — wide screens */}
+        <div className="hidden sm:flex items-center gap-4 flex-shrink-0">
+          {meta}
         </div>
 
         {/* Cancel button */}
@@ -66,8 +85,9 @@ export default function EmailRow({ email, onCancel, showCancel = false }: EmailR
               e.stopPropagation();
               onCancel(email.id);
             }}
-            className="opacity-0 group-hover:opacity-100 p-1.5 rounded-lg hover:bg-red-500/10 text-[var(--color-text-muted)] hover:text-red-400 transition-all"
-            title="Cancel email"
+            className="flex-shrink-0 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 focus:opacity-100 w-8 h-8 rounded-full flex items-center justify-center hover:bg-[var(--color-error-soft)] text-[var(--color-ink-muted)] hover:text-[var(--color-error)] transition-all"
+            title="Cancel this email"
+            aria-label="Cancel this email"
           >
             <XIcon className="w-4 h-4" />
           </button>

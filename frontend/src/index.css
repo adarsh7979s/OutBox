@@ -71,30 +71,35 @@
   --shadow-lime: 0 12px 30px -10px rgba(150, 200, 40, 0.45);
 }
 
-/* ── Reset ── */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+/* ── Reset ──
+   Must live in @layer base: unlayered rules outrank everything inside
+   Tailwind's @layer utilities, so an unlayered `* { margin: 0; padding: 0 }`
+   silently kills every m-*/p-* utility in the app. */
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
 
-html {
-  font-family: var(--font-sans);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
-}
+  html {
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
 
-body {
-  background: var(--color-bg);
-  color: var(--color-ink);
-  min-height: 100vh;
-  overflow-x: hidden;
-  font-feature-settings: "cv11", "ss01";
-}
+  body {
+    background: var(--color-bg);
+    color: var(--color-ink);
+    min-height: 100vh;
+    overflow-x: hidden;
+    font-feature-settings: "cv11", "ss01";
+  }
 
-#root {
-  min-height: 100vh;
+  #root {
+    min-height: 100vh;
+  }
 }
 
 /* Display + data helpers */

@@ -21,31 +21,36 @@ export default function SentPage() {
     <>
       <TopBar
         title="Sent"
+        subtitle="Every email that has left the building, most recent first."
         showSearch
         onSearch={setSearchQuery}
       />
+
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="font-display text-lg font-semibold text-[var(--color-ink)]">
+          {searchQuery ? 'Search results' : 'Delivered'}
+        </h2>
+        {emails && emails.length > 0 && (
+          <span className="text-xs font-data text-[var(--color-ink-muted)]">{emails.length} shown</span>
+        )}
+      </div>
 
       {isLoading ? (
         <Spinner />
       ) : !emails || emails.length === 0 ? (
         <EmptyState
           icon={<Send className="w-7 h-7" />}
-          title={searchQuery ? 'No results' : 'No sent emails yet'}
-          description={searchQuery ? 'Try a different search term' : 'Emails will appear here after they are delivered'}
+          title={searchQuery ? 'No matches' : 'No sent emails yet'}
+          description={searchQuery ? 'Try a different name or subject line.' : 'Once your scheduled emails go out, they will land here.'}
         />
       ) : (
         <>
           <div className="flex flex-col gap-3 stagger-children">
             {emails.map((email) => (
-              <EmailRow
-                key={email.id}
-                email={email}
-              />
+              <EmailRow key={email.id} email={email} />
             ))}
           </div>
-          {!searchQuery && (
-            <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
-          )}
+          {!searchQuery && <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />}
         </>
       )}
     </>

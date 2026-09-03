@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { Upload, FileText, X } from 'lucide-react';
+import { Upload, FileText, X, CheckCircle2 } from 'lucide-react';
 
 interface FileUploadProps {
   onEmailsParsed: (emails: string[]) => void;
@@ -8,6 +8,7 @@ interface FileUploadProps {
 export default function FileUpload({ onEmailsParsed }: FileUploadProps) {
   const [isDragging, setIsDragging] = useState(false);
   const [fileName, setFileName] = useState<string | null>(null);
+  const [foundCount, setFoundCount] = useState(0);
   const fileRef = useRef<HTMLInputElement>(null);
 
   const parseEmails = (text: string): string[] => {
@@ -22,6 +23,7 @@ export default function FileUpload({ onEmailsParsed }: FileUploadProps) {
     reader.onload = (e) => {
       const text = e.target?.result as string;
       const emails = parseEmails(text);
+      setFoundCount(emails.length);
       onEmailsParsed(emails);
     };
     reader.readAsText(file);
@@ -42,17 +44,17 @@ export default function FileUpload({ onEmailsParsed }: FileUploadProps) {
         onDrop={handleDrop}
         onClick={() => fileRef.current?.click()}
         className={`
-          flex items-center justify-center gap-3 p-4 rounded-xl border-2 border-dashed
+          flex items-center justify-center gap-3 px-4 py-5 rounded-2xl border-2 border-dashed
           cursor-pointer transition-all duration-200
           ${isDragging
-            ? 'border-cyan-400/40 bg-cyan-500/5'
-            : 'border-[var(--color-border)] hover:border-white/20 hover:bg-white/[0.02]'
+            ? 'border-[var(--color-violet)] bg-[var(--color-violet-soft)]'
+            : 'border-[var(--color-border-strong)] hover:border-[var(--color-violet)] hover:bg-[var(--color-surface-2)]'
           }
         `}
       >
-        <Upload className={`w-5 h-5 ${isDragging ? 'text-cyan-400' : 'text-[var(--color-text-muted)]'}`} />
-        <span className="text-sm text-[var(--color-text-secondary)]">
-          Drop CSV/TXT or <span className="text-cyan-400 font-medium">browse</span>
+        <Upload className={`w-5 h-5 ${isDragging ? 'text-[var(--color-violet)]' : 'text-[var(--color-ink-muted)]'}`} />
+        <span className="text-sm text-[var(--color-ink-soft)]">
+          Drop a CSV or TXT file, or <span className="text-[var(--color-violet-deep)] font-semibold">browse</span>
         </span>
       </div>
 
@@ -68,12 +70,19 @@ export default function FileUpload({ onEmailsParsed }: FileUploadProps) {
       />
 
       {fileName && (
-        <div className="flex items-center gap-2 px-3 py-2 glass rounded-lg text-xs">
-          <FileText className="w-3.5 h-3.5 text-cyan-400" />
-          <span className="text-[var(--color-text-secondary)] flex-1 truncate">{fileName}</span>
+        <div className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl bg-[var(--color-surface-2)] border border-[var(--color-border)] text-xs">
+          <FileText className="w-4 h-4 text-[var(--color-violet)] flex-shrink-0" />
+          <span className="text-[var(--color-ink-soft)] flex-1 truncate font-medium">{fileName}</span>
+          {foundCount > 0 && (
+            <span className="flex items-center gap-1 text-[var(--color-success)] font-semibold whitespace-nowrap">
+              <CheckCircle2 className="w-3.5 h-3.5" />
+              <span className="font-data">{foundCount}</span> found
+            </span>
+          )}
           <button
-            onClick={() => { setFileName(null); if (fileRef.current) fileRef.current.value = ''; }}
-            className="text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)]"
+            onClick={() => { setFileName(null); setFoundCount(0); if (fileRef.current) fileRef.current.value = ''; }}
+            className="text-[var(--color-ink-muted)] hover:text-[var(--color-ink)] rounded-full p-0.5"
+            aria-label="Remove file"
           >
             <X className="w-3.5 h-3.5" />
           </button>

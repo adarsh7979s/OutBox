@@ -10,11 +10,12 @@ export default function Pagination({ page, totalPages, onPageChange }: Paginatio
   if (totalPages <= 1) return null;
 
   return (
-    <div className="flex items-center justify-center gap-2 mt-6">
+    <div className="flex items-center justify-center gap-1.5 mt-8">
       <button
         onClick={() => onPageChange(page - 1)}
         disabled={page <= 1}
-        className="p-2 rounded-lg glass glass-hover disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+        className="w-9 h-9 rounded-full flex items-center justify-center btn-soft disabled:opacity-30 disabled:cursor-not-allowed"
+        aria-label="Previous page"
       >
         <ChevronLeft className="w-4 h-4" />
       </button>
@@ -37,10 +38,10 @@ export default function Pagination({ page, totalPages, onPageChange }: Paginatio
               key={pageNum}
               onClick={() => onPageChange(pageNum)}
               className={`
-                w-9 h-9 rounded-lg text-sm font-medium transition-all
+                w-9 h-9 rounded-full text-sm font-semibold font-data transition-all
                 ${page === pageNum
-                  ? 'btn-gradient text-white'
-                  : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-white/5'
+                  ? 'btn-ink'
+                  : 'text-[var(--color-ink-soft)] hover:text-[var(--color-ink)] hover:bg-black/[0.04]'
                 }
               `}
             >
@@ -53,7 +54,8 @@ export default function Pagination({ page, totalPages, onPageChange }: Paginatio
       <button
         onClick={() => onPageChange(page + 1)}
         disabled={page >= totalPages}
-        className="p-2 rounded-lg glass glass-hover disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+        className="w-9 h-9 rounded-full flex items-center justify-center btn-soft disabled:opacity-30 disabled:cursor-not-allowed"
+        aria-label="Next page"
       >
         <ChevronRight className="w-4 h-4" />
       </button>

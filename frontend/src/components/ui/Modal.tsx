@@ -39,7 +39,7 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md' }:
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm animate-fade-in"
+        className="absolute inset-0 bg-[rgba(23,19,32,0.28)] backdrop-blur-sm animate-fade-in"
         onClick={onClose}
         style={{ animationDuration: '0.2s' }}
       />
@@ -48,17 +48,17 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md' }:
       <div
         className={`
           relative w-full ${sizeClasses[size]}
-          glass-strong rounded-2xl p-6
-          animate-fade-in-scale
+          card !shadow-lg p-6 animate-fade-in-scale
         `}
         style={{ animationDuration: '0.3s' }}
       >
         {title && (
           <div className="flex items-center justify-between mb-5">
-            <h2 className="text-lg font-semibold text-[var(--color-text-primary)]">{title}</h2>
+            <h2 className="font-display text-lg font-semibold text-[var(--color-ink)]">{title}</h2>
             <button
               onClick={onClose}
-              className="p-1.5 rounded-lg hover:bg-white/10 transition-colors text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)]"
+              className="p-2 rounded-full hover:bg-black/[0.05] transition-colors text-[var(--color-ink-muted)] hover:text-[var(--color-ink)]"
+              aria-label="Close"
             >
               <X className="w-5 h-5" />
             </button>

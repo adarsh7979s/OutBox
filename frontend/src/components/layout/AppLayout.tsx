@@ -4,17 +4,16 @@ import Sidebar from './Sidebar';
 export default function AppLayout() {
   return (
     <div className="min-h-screen relative">
-      {/* Ambient background orbs */}
-      <div className="ambient-orb ambient-orb-cyan" />
-      <div className="ambient-orb ambient-orb-violet" />
-      <div className="ambient-orb ambient-orb-teal" />
+      {/* Dreamy lavender atmosphere */}
+      <div className="app-wash" />
 
-      {/* Sidebar */}
+      {/* Floating rail */}
       <Sidebar />
 
-      {/* Main content */}
-      <main className="ml-[72px] min-h-screen relative z-10">
-        <div className="max-w-5xl mx-auto px-8 py-8">
+      {/* Main content — full width on mobile (rail becomes a bottom bar),
+          offset by the floating rail from sm up. */}
+      <main className="min-h-screen relative z-10 sm:ml-[96px] pb-28 sm:pb-0">
+        <div className="max-w-5xl mx-auto px-4 sm:px-8 py-6 sm:py-10">
           <Outlet />
         </div>
       </main>

@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -s \"http://localhost:5178/src/index.css\" -o /tmp/idx.css)",
+      "Read(//tmp/**)",
+      "Bash(grep -o \"\\\\.ml-\\\\\\\\\\\\\\\\\\\\[84px\\\\\\\\\\\\\\\\\\\\][^}]*}\" /tmp/idx.css | head -5; echo \"=== all 84px context ===\"; grep -o \".\\\\{60\\\\}84px.\\\\{60\\\\}\" /tmp/idx.css | head -5; echo \"=== ml- utilities present ===\"; grep -o \"\\\\.ml-[a-z0-9\\\\\\\\\\\\\\\\[]*\" /tmp/idx.css | sort -u | head -20)"
+    ]
+  }
+}

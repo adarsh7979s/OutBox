@@ -89,11 +89,15 @@ export default function App() {
               className: 'toast-custom',
               duration: 4000,
               style: {
-                background: 'rgba(17, 24, 39, 0.95)',
-                backdropFilter: 'blur(24px)',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                color: '#F1F5F9',
+                background: '#ffffff',
+                border: '1px solid rgba(23, 19, 32, 0.09)',
+                boxShadow: '0 14px 34px -16px rgba(70, 45, 140, 0.22)',
+                color: '#171320',
+                borderRadius: '14px',
+                fontWeight: 500,
               },
+              success: { iconTheme: { primary: '#16a34a', secondary: '#ffffff' } },
+              error: { iconTheme: { primary: '#e11d48', secondary: '#ffffff' } },
             }}
           />
         </AuthProvider>
