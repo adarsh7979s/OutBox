@@ -24,7 +24,7 @@ async function bootstrap() {
   const app = express();
 
   // ── Middleware ──
-  app.use(cors({ origin: env.corsOrigin, credentials: true }));
+  app.use(cors({ origin: env.corsOrigins, credentials: true }));
   app.use(express.json({ limit: '10mb' }));
   app.use(express.urlencoded({ extended: true }));
   app.use(cookieParser());
@@ -75,10 +75,11 @@ async function bootstrap() {
   }
 
   // ── Start Server ──
-  const server = app.listen(env.port, () => {
-    logger.info(`🚀 Server running on http://localhost:${env.port}`);
-    logger.info(`📊 Bull Board: http://localhost:${env.port}/admin/queues`);
-    logger.info(`🏥 Health: http://localhost:${env.port}/api/health`);
+  // Bind 0.0.0.0 so container platforms (Render) can route external traffic.
+  const server = app.listen(env.port, '0.0.0.0', () => {
+    logger.info(`🚀 Server listening on 0.0.0.0:${env.port} (${env.nodeEnv})`);
+    logger.info(`📊 Bull Board: /admin/queues`);
+    logger.info(`🏥 Health: /api/health`);
   });
 
   // ── Graceful Shutdown ──

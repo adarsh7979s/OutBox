@@ -1,7 +1,19 @@
 import axios from 'axios';
 
+/**
+ * Base URL for the backend API.
+ *
+ * Local dev: unset, so this falls back to '/api' and Vite's dev proxy
+ * forwards to http://localhost:4000.
+ * Production: set VITE_API_URL (e.g. https://your-backend.onrender.com/api).
+ *
+ * Exported because OAuth entry points navigate the browser directly and
+ * cannot go through axios.
+ */
+export const API_BASE_URL = import.meta.env.VITE_API_URL || '/api';
+
 const client = axios.create({
-  baseURL: '/api',
+  baseURL: API_BASE_URL,
   headers: { 'Content-Type': 'application/json' },
 });
 

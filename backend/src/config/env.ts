@@ -10,6 +10,7 @@ const envSchema = z.object({
 
   DATABASE_URL: z.string(),
 
+  REDIS_URL: z.string().optional(),
   REDIS_HOST: z.string().default('localhost'),
   REDIS_PORT: z.string().default('6379'),
   REDIS_PASSWORD: z.string().default(''),
@@ -47,10 +48,19 @@ export const env = {
   port: parseInt(parsed.data.PORT, 10),
   nodeEnv: parsed.data.NODE_ENV,
   corsOrigin: parsed.data.CORS_ORIGIN,
+  // CORS_ORIGIN accepts a comma-separated list so production and preview
+  // frontends can be allowed without code changes.
+  corsOrigins: parsed.data.CORS_ORIGIN.split(',')
+    .map((o) => o.trim())
+    .filter(Boolean),
 
   databaseUrl: parsed.data.DATABASE_URL,
 
   redis: {
+    // Providers like Upstash hand out a single connection URL
+    // (rediss://default:<password>@host:6379). When present it wins over
+    // the discrete host/port/password used for local development.
+    url: parsed.data.REDIS_URL || undefined,
     host: parsed.data.REDIS_HOST,
     port: parseInt(parsed.data.REDIS_PORT, 10),
     password: parsed.data.REDIS_PASSWORD || undefined,

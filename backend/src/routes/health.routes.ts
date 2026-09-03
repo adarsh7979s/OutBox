@@ -27,12 +27,14 @@ router.get('/', async (_req: Request, res: Response) => {
     checks.redis = { status: 'unhealthy', message: String(error) };
   }
 
-  // Elasticsearch
+  // Elasticsearch — OPTIONAL dependency. Reported for visibility but
+  // deliberately excluded from the overall status below, so a deployment
+  // without Elasticsearch still passes platform health checks.
   try {
     await esClient.ping();
     checks.elasticsearch = { status: 'healthy' };
   } catch (error) {
-    checks.elasticsearch = { status: 'unhealthy', message: String(error) };
+    checks.elasticsearch = { status: 'unavailable', message: String(error) };
   }
 
   // BullMQ Queue
@@ -46,7 +48,9 @@ router.get('/', async (_req: Request, res: Response) => {
     checks.queue = { status: 'unhealthy', message: String(error) };
   }
 
-  const allHealthy = Object.values(checks).every((c) => c.status === 'healthy');
+  // Elasticsearch is optional, so it does not gate readiness.
+  const REQUIRED = ['database', 'redis', 'queue'];
+  const allHealthy = REQUIRED.every((k) => checks[k]?.status === 'healthy');
 
   res.status(allHealthy ? 200 : 503).json({
     status: allHealthy ? 'healthy' : 'degraded',

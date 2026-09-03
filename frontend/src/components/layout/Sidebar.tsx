@@ -2,6 +2,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { CalendarClock, Send, PenLine, LogOut, Hash } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { useEmailCounts } from '../../hooks/useEmails';
+import { API_BASE_URL } from '../../api/client';
 
 const navItems = [
   { path: '/dashboard', icon: CalendarClock, label: 'Scheduled', countKey: 'scheduled' as const },
@@ -93,7 +94,7 @@ export default function Sidebar() {
       {/* Bottom actions */}
       <div className="flex flex-row sm:flex-col items-center gap-1 sm:gap-1.5 sm:mt-2">
         <button
-          onClick={() => window.open('/api/slack/connect', '_self')}
+          onClick={() => window.open(`${API_BASE_URL}/slack/connect`, '_self')}
           className="relative w-11 h-11 rounded-2xl flex items-center justify-center text-white/55 hover:text-white hover:bg-white/10 transition-all group"
           aria-label="Connect Slack"
         >
