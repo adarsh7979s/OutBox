@@ -8,6 +8,9 @@
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-blue.svg?logo=postgresql)](https://www.postgresql.org/)
 [![Elasticsearch](https://img.shields.io/badge/Elasticsearch-8.13-yellow.svg?logo=elasticsearch)](https://www.elastic.co/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Live Demo](https://img.shields.io/badge/Live_Demo-out--box--frontend--gamma.vercel.app-000000.svg?logo=vercel)](https://out-box-frontend-gamma.vercel.app/)
+
+**🔗 Live app — [out-box-frontend-gamma.vercel.app](https://out-box-frontend-gamma.vercel.app/)**
 
 A high-performance, fault-tolerant full-stack email scheduling and dispatch platform. Designed with **zero cron dependencies**, OutBox leverages **BullMQ delayed jobs**, **atomic Redis rate limiting**, **PostgreSQL persistence**, and **Elasticsearch full-text indexing** to guarantee accurate, non-duplicate, rate-regulated email distribution at scale.
 
