@@ -73,8 +73,8 @@
 
 /* ── Reset ──
    Must live in @layer base: unlayered rules outrank everything inside
-   Tailwind's @layer utilities, so an unlayered `* { margin: 0; padding: 0 }`
-   silently kills every m-*/p-* utility in the app. */
+   Tailwind's @layer utilities, so an unlayered universal margin/padding
+   reset silently kills every margin and padding utility in the app. */
 @layer base {
   * {
     margin: 0;

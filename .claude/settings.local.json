@@ -7,7 +7,15 @@
       "Bash(mkdir -p prisma/migrations/0_init)",
       "Bash(npx prisma *)",
       "Bash(echo \"exit=$?\")",
-      "Bash(git check-ignore *)"
+      "Bash(git check-ignore *)",
+      "Bash(npx tsc *)",
+      "Bash(node -p \"require\\('./node_modules/typescript/package.json'\\).version\")",
+      "Bash(node -p \"require\\('./backend/node_modules/typescript/package.json'\\).version\")",
+      "Bash(node -p \"require\\('./frontend/node_modules/typescript/package.json'\\).version\")",
+      "Bash(node -p \"JSON.stringify\\(require\\('./frontend/package.json'\\).devDependencies\\)\")",
+      "Bash(npm run *)",
+      "Bash(echo \"EXIT=$?\")",
+      "Bash(cd \"C:/Users/91797\" && ls -la package.json package-lock.json node_modules 2>&1 | head -20; echo \"=== pkg contents if exists ===\"; cat package.json 2>/dev/null | head -20)"
     ]
   }
 }
