@@ -1,0 +1,367 @@
+@import "tailwindcss";
+
+/* ══════════════════════════════════════════════════════════════
+   OutBox — "Bloom" design system
+   Light lilac canvas · soft white cards · lime signature action
+   ══════════════════════════════════════════════════════════════ */
+
+@theme {
+  /* ── Canvas & surfaces ── */
+  --color-bg: #f4f1fb;
+  --color-bg-elevated: #ffffff;
+  --color-surface: #ffffff;
+  --color-surface-2: #fbfaff;
+  --color-surface-hover: #f7f5ff;
+
+  /* ── Ink (text + dark chrome) ── */
+  --color-ink: #171320;
+  --color-ink-soft: #575167;
+  --color-ink-muted: #8b8598;
+
+  /* Back-compat aliases (old token names → light values) */
+  --color-text-primary: #171320;
+  --color-text-secondary: #575167;
+  --color-text-muted: #8b8598;
+  --color-border: rgba(23, 19, 32, 0.09);
+  --color-border-strong: rgba(23, 19, 32, 0.14);
+  --color-border-focus: rgba(124, 92, 252, 0.5);
+
+  /* ── Signature accent: lime ── */
+  --color-lime: #c6f24e;
+  --color-lime-deep: #b4e52f;
+  --color-lime-soft: #eefbc9;
+  --color-lime-ink: #26310a;
+
+  /* ── Secondary accent: violet ── */
+  --color-violet: #7c5cfc;
+  --color-violet-deep: #6a45f5;
+  --color-violet-soft: #efeaff;
+
+  /* ── Status ── */
+  --color-success: #16a34a;
+  --color-success-soft: #dcfce7;
+  --color-warning: #d97706;
+  --color-warning-soft: #fef3c7;
+  --color-error: #e11d48;
+  --color-error-soft: #ffe4e6;
+  --color-info: #2f6bff;
+  --color-info-soft: #e6eeff;
+
+  /* ── Gradient wash stops (Bloom hero DNA) ── */
+  --wash-lilac: #e9d8fd;
+  --wash-pink: #f7d6e8;
+  --wash-peri: #d8dbfb;
+
+  /* ── Type roles ── */
+  --font-display: "Bricolage Grotesque", "Inter", system-ui, sans-serif;
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+  --font-data: "Space Grotesk", "Inter", ui-monospace, monospace;
+
+  /* ── Radii ── */
+  --radius-sm: 12px;
+  --radius-md: 16px;
+  --radius-lg: 22px;
+  --radius-xl: 28px;
+
+  /* ── Soft, purple-tinted shadows ── */
+  --shadow-xs: 0 1px 2px rgba(60, 40, 120, 0.06);
+  --shadow-sm: 0 4px 14px -6px rgba(70, 45, 140, 0.16);
+  --shadow-md: 0 14px 34px -16px rgba(70, 45, 140, 0.22);
+  --shadow-lg: 0 30px 60px -24px rgba(70, 45, 140, 0.28);
+  --shadow-lime: 0 12px 30px -10px rgba(150, 200, 40, 0.45);
+}
+
+/* ── Reset ── */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-ink);
+  min-height: 100vh;
+  overflow-x: hidden;
+  font-feature-settings: "cv11", "ss01";
+}
+
+#root {
+  min-height: 100vh;
+}
+
+/* Display + data helpers */
+.font-display {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+}
+.font-data {
+  font-family: var(--font-data);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(23, 19, 32, 0.14);
+  border-radius: 999px;
+  border: 3px solid transparent;
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(23, 19, 32, 0.24);
+  background-clip: padding-box;
+  border: 3px solid transparent;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   Atmosphere — the dreamy lavender wash (replaces dark orbs)
+   ══════════════════════════════════════════════════════════════ */
+.app-wash {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.app-wash::before,
+.app-wash::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+}
+/* top-left lilac→pink bloom */
+.app-wash::before {
+  width: 780px;
+  height: 780px;
+  top: -320px;
+  left: -180px;
+  background: radial-gradient(circle at 30% 30%, var(--wash-lilac) 0%, var(--wash-pink) 45%, transparent 72%);
+  opacity: 0.75;
+  animation: drift 26s ease-in-out infinite;
+}
+/* bottom-right periwinkle bloom */
+.app-wash::after {
+  width: 680px;
+  height: 680px;
+  bottom: -300px;
+  right: -160px;
+  background: radial-gradient(circle at 60% 60%, var(--wash-peri) 0%, var(--wash-lilac) 50%, transparent 74%);
+  opacity: 0.7;
+  animation: drift 32s ease-in-out infinite reverse;
+}
+
+@keyframes drift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(40px, 30px) scale(1.06); }
+  66% { transform: translate(-30px, 20px) scale(0.97); }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   Surfaces
+   ══════════════════════════════════════════════════════════════ */
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+.card-quiet {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+.card-hover {
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s ease, border-color 0.25s ease;
+}
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: rgba(124, 92, 252, 0.22);
+}
+
+/* Inset field surface */
+.field {
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-ink);
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+.field::placeholder {
+  color: var(--color-ink-muted);
+}
+.field:focus,
+.field:focus-visible {
+  outline: none;
+  background: #fff;
+  border-color: rgba(124, 92, 252, 0.55);
+  box-shadow: 0 0 0 4px rgba(124, 92, 252, 0.12);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   Signature — the lime circle-arrow "send" action
+   ══════════════════════════════════════════════════════════════ */
+.arrow-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: var(--color-lime);
+  color: var(--color-lime-ink);
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(150, 200, 40, 0.4);
+}
+
+/* Dark ink pill (primary) */
+.btn-ink {
+  background: var(--color-ink);
+  color: #fff;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+.btn-ink:hover:not(:disabled) {
+  background: #241d33;
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+.btn-ink:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+/* Solid lime pill */
+.btn-lime {
+  background: var(--color-lime);
+  color: var(--color-lime-ink);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+.btn-lime:hover:not(:disabled) {
+  background: var(--color-lime-deep);
+  box-shadow: var(--shadow-lime);
+  transform: translateY(-1px);
+}
+.btn-lime:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+/* Soft neutral pill */
+.btn-soft {
+  background: #fff;
+  color: var(--color-ink);
+  border: 1px solid var(--color-border);
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+.btn-soft:hover:not(:disabled) {
+  background: var(--color-surface-2);
+  border-color: var(--color-border-strong);
+  transform: translateY(-1px);
+}
+
+/* Pill tag / chip */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  font-weight: 500;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   Motion — calm, purposeful
+   ══════════════════════════════════════════════════════════════ */
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fade-in-scale {
+  from { opacity: 0; transform: scale(0.985) translateY(6px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+@keyframes rise {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulse-soft {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.45; }
+}
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.animate-fade-in { animation: fade-in 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) forwards; }
+.animate-fade-in-scale { animation: fade-in-scale 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) forwards; }
+.animate-rise { animation: rise 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) forwards; }
+.animate-spin-slow { animation: spin 1s linear infinite; }
+
+/* Staggered children */
+.stagger-children > * {
+  opacity: 0;
+  animation: rise 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+}
+.stagger-children > *:nth-child(1) { animation-delay: 0.04s; }
+.stagger-children > *:nth-child(2) { animation-delay: 0.08s; }
+.stagger-children > *:nth-child(3) { animation-delay: 0.12s; }
+.stagger-children > *:nth-child(4) { animation-delay: 0.16s; }
+.stagger-children > *:nth-child(5) { animation-delay: 0.20s; }
+.stagger-children > *:nth-child(6) { animation-delay: 0.24s; }
+.stagger-children > *:nth-child(7) { animation-delay: 0.28s; }
+.stagger-children > *:nth-child(8) { animation-delay: 0.32s; }
+.stagger-children > *:nth-child(9) { animation-delay: 0.36s; }
+.stagger-children > *:nth-child(10) { animation-delay: 0.40s; }
+
+/* ── Skeleton ── */
+.skeleton {
+  background: linear-gradient(90deg, rgba(23, 19, 32, 0.05) 0%, rgba(23, 19, 32, 0.09) 50%, rgba(23, 19, 32, 0.05) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+  border-radius: 10px;
+}
+
+/* ── Toast ── */
+.toast-custom {
+  background: #ffffff !important;
+  border: 1px solid var(--color-border) !important;
+  box-shadow: var(--shadow-md) !important;
+  color: var(--color-ink) !important;
+  border-radius: 14px !important;
+  font-weight: 500;
+}
+
+/* ── Accessibility ── */
+:focus-visible {
+  outline: 2px solid var(--color-violet);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .app-wash::before,
+  .app-wash::after { animation: none; }
+}
