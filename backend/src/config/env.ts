@@ -35,6 +35,9 @@ const envSchema = z.object({
   MAX_EMAILS_PER_HOUR_PER_SENDER: z.string().default('50'),
 
   FRONTEND_URL: z.string().default('http://localhost:5173'),
+
+  RESEND_API_KEY: z.string(),
+  RESEND_FROM_EMAIL: z.string(),
 });
 
 const parsed = envSchema.safeParse(process.env);
@@ -96,4 +99,9 @@ export const env = {
   },
 
   frontendUrl: parsed.data.FRONTEND_URL,
+
+  resend: {
+    apiKey: parsed.data.RESEND_API_KEY,
+    fromEmail: parsed.data.RESEND_FROM_EMAIL,
+  },
 };
