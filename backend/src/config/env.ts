@@ -36,8 +36,14 @@ const envSchema = z.object({
 
   FRONTEND_URL: z.string().default('http://localhost:5173'),
 
-  RESEND_API_KEY: z.string(),
-  RESEND_FROM_EMAIL: z.string(),
+  RESEND_API_KEY: z.string().default(''),
+  RESEND_FROM_EMAIL: z.string().default(''),
+
+  // Gmail SMTP (used for actual email delivery)
+  SMTP_HOST: z.string().default('smtp.gmail.com'),
+  SMTP_PORT: z.string().default('587'),
+  SMTP_USER: z.string(),
+  SMTP_PASS: z.string(),
 });
 
 const parsed = envSchema.safeParse(process.env);
@@ -103,5 +109,12 @@ export const env = {
   resend: {
     apiKey: parsed.data.RESEND_API_KEY,
     fromEmail: parsed.data.RESEND_FROM_EMAIL,
+  },
+
+  smtp: {
+    host: parsed.data.SMTP_HOST,
+    port: parseInt(parsed.data.SMTP_PORT, 10),
+    user: parsed.data.SMTP_USER,
+    pass: parsed.data.SMTP_PASS,
   },
 };

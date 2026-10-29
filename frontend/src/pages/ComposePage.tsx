@@ -7,6 +7,7 @@ import Button from '../components/ui/Button';
 import Input from '../components/ui/Input';
 import EmailChips from '../components/email/EmailChips';
 import FileUpload from '../components/email/FileUpload';
+import Modal from '../components/ui/Modal';
 import { useScheduleEmails } from '../hooks/useEmails';
 import { useSenders, useCreateSender } from '../hooks/useSenders';
 import type { Sender } from '../api/types';
@@ -39,13 +40,25 @@ export default function ComposePage() {
   const [delayBetween, setDelayBetween] = useState(2);
   const [hourlyLimit, setHourlyLimit] = useState(50);
 
+  // New Sender modal state
+  const [showSenderModal, setShowSenderModal] = useState(false);
+  const [newSenderEmail, setNewSenderEmail] = useState('');
+  const [newSenderName, setNewSenderName] = useState('');
+
   if (senders && senders.length > 0 && !selectedSenderId) {
     setSelectedSenderId(senders[0].id);
   }
 
   const handleCreateSender = async () => {
-    const sender = await createSenderMutation.mutateAsync({});
+    if (!newSenderEmail.trim()) return;
+    const sender = await createSenderMutation.mutateAsync({
+      email: newSenderEmail.trim(),
+      name: newSenderName.trim() || undefined,
+    });
     setSelectedSenderId(sender.id);
+    setShowSenderModal(false);
+    setNewSenderEmail('');
+    setNewSenderName('');
   };
 
   const handleFileEmails = (emails: string[]) => {
@@ -110,8 +123,7 @@ export default function ComposePage() {
                   variant="secondary"
                   size="md"
                   icon={<Plus className="w-4 h-4" />}
-                  onClick={handleCreateSender}
-                  loading={createSenderMutation.isPending}
+                  onClick={() => setShowSenderModal(true)}
                 >
                   New sender
                 </Button>
@@ -245,6 +257,57 @@ export default function ComposePage() {
           </GlassCard>
         </div>
       </div>
+
+      {/* ── Add Sender Modal ── */}
+      <Modal
+        isOpen={showSenderModal}
+        onClose={() => {
+          setShowSenderModal(false);
+          setNewSenderEmail('');
+          setNewSenderName('');
+        }}
+        title="Add a sender"
+        size="sm"
+      >
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-1.5">
+            <label className="text-sm font-medium text-[var(--color-ink-soft)]">
+              Email address <span className="text-red-400">*</span>
+            </label>
+            <Input
+              value={newSenderEmail}
+              onChange={(e) => setNewSenderEmail(e.target.value)}
+              placeholder="you@yourdomain.com"
+              type="email"
+            />
+            <p className="text-xs text-[var(--color-ink-muted)]">
+              The email your recipients will see in their inbox.
+            </p>
+          </div>
+
+          <div className="flex flex-col gap-1.5">
+            <label className="text-sm font-medium text-[var(--color-ink-soft)]">
+              Display name <span className="text-xs text-[var(--color-ink-muted)]">(optional)</span>
+            </label>
+            <Input
+              value={newSenderName}
+              onChange={(e) => setNewSenderName(e.target.value)}
+              placeholder="Jane Doe"
+            />
+          </div>
+
+          <Button
+            variant="primary"
+            size="md"
+            onClick={handleCreateSender}
+            loading={createSenderMutation.isPending}
+            disabled={!newSenderEmail.trim()}
+            className="mt-2"
+          >
+            Add sender
+          </Button>
+        </div>
+      </Modal>
     </>
   );
 }
